@@ -14,11 +14,11 @@ For the programmers:
 - use venv to set up a virtual environment and pip within the virtual environment to install from requirements.txt
 - python3 main.py > test.txt
 - ??? (it takes a while to scan the pages)
-- NCR 2017 Psych Sheet! Or whatever CanadianCubing competition's listed inside 
+- NCR 2017 Psych Sheet! Or whatever CanadianCubing competition's listed inside main.py
 
 ## How reliable are the results? ##
 
 The scraper only considers people who have competed before and who have an official non-DNF average in the event.
 Thus, consider a standard deviation from around 4 spots for fast solvers to around 8 spots for slower solvers.
 
-Note: Do NOT use this scraper to bet on potential winners in future competitions.
+Warning: Do not bet with this program.
