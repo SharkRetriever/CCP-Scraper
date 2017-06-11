@@ -38,22 +38,7 @@ class PsychScraper:
         return name
 
 
-    def _get_time(self, competitor, event):
-        wca_profile_id = competitor.xpath("@href")[0].split("=")[-1]
-        wca_site_str = "https://www.worldcubeassociation.org/persons/" + wca_profile_id
-        wca_scrape_result = self._htmlscraper.scrape(wca_site_str)
-        wca_site_tree = etree.HTML(wca_scrape_result)
-
-        records_table = wca_site_tree.xpath("//div[@class='personal-records']//table")[0]
-        
-        event_id = self._wca_event_dict[event]
-
-        event_block = None
-        try:
-            event_block = records_table.xpath("//td[@class='event' and @data-event='" + event_id + "']/..")[0]
-        except:
-            return None
-
+    def _get_average_time(self, event_block):
         event_average_block = event_block.xpath("td")[5]
 
         event_average_text = event_average_block.xpath("a/text()")[0].strip()
@@ -62,6 +47,40 @@ class PsychScraper:
         else:
             time = Time(event_average_text)
             return time
+
+    def _get_single_time(self, competitor, event):
+        event_single_block = event_block.xpath("td")[4]
+
+        event_single_text = event_single_block.xpath("a/text()")[0].strip()
+        if event_single_text == "":
+            return None
+        else:
+            time = Time(event_single_text)
+            return time
+
+    def _get_time(self, competitor, event):
+        wca_profile_id = competitor.xpath("@href")[0].split("=")[-1]
+        wca_site_str = "https://www.worldcubeassociation.org/persons/" + wca_profile_id
+        wca_scrape_result = self._htmlscraper.scrape(wca_site_str)
+        wca_site_tree = etree.HTML(wca_scrape_result)
+
+        event_block = None
+        try:
+            records_table = wca_site_tree.xpath("//div[@class='personal-records']//table")[0]
+            event_id = self._wca_event_dict[event]
+            event_block = records_table.xpath("//td[@class='event' and @data-event='" + event_id + "']/..")[0]
+        except:
+            return None
+
+        event_average_text = _get_average_time(self, event_block);
+        event_single_text = _get_single_time(self, event_block);
+
+        if event_average_text is not None and (not event.endsWith("Blindfolded") and not event.endsWith("Blind")):
+            return event_average_text, False
+        elif event_single_text is not None:
+            return event_single_text, True
+        else:
+            return None, None
         
 
     def scrape(self, event):
@@ -74,11 +93,10 @@ class PsychScraper:
         competitors = []
 
         for competitor in with_results_competitors_trees:
-            # get the info
             competitor_name = self._get_name(competitor)
-            competitor_time = self._get_time(competitor, event)
+            competitor_time, use_single = self._get_time(competitor, event)
             if competitor_time is not None:
-                competitors.append({ 'name': competitor_name, 'time': competitor_time })
+                competitors.append({ 'name': competitor_name, 'time': competitor_time, 'use_single': use_single })
         
         competitors = sorted(competitors, key = lambda competitor: competitor["time"].milliseconds)
 

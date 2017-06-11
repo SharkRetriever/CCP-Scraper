@@ -3,9 +3,9 @@ from printer import PsychPrinter
 
 
 def main():
-    competition_name = "NCR2017"
-    competition_events = ["2x2x2", "3x3x3", "3x3x3 One-Handed", 
-            "3x3x3 Blindfolded", "4x4x4", 
+    competition_name = "NMO2017"
+    competition_events = ["2x2x2", "3x3x3", 
+            "4x4x4", "5x5x5", 
             "Pyraminx", "Skewb"]
 
     pscraper = PsychScraper(competition_name)

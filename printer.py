@@ -17,7 +17,9 @@ class PsychPrinter:
             rank = str(i + 1)
             name = competitor["name"]
             time = competitor["time"]
+            use_single = competitor["use_single"]
+            use_single_suffix = "(s)" if use_single else ""
             spacing = self._get_spacing(rank, name, time)
-            print(rank + ". " + name + spacing + time.text)
+            print(rank + ". " + name + spacing + time.text + use_single_suffix)
 
         print()
