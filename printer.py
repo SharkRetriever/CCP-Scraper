@@ -3,7 +3,6 @@ from unicodedata import normalize
 class PsychPrinter:
     def __init__(self):
         self._NUM_SPACES = 45
-        pass
 
 
     def _get_spacing(self, rank, name, time):
@@ -11,12 +10,18 @@ class PsychPrinter:
                 - len(rank) - len(normalize('NFC', name)) - len(time.text))
 
 
+    def _trim_parens(self, name):
+        new_name_fragments = [x for x in name.split(" ") if not x.startswith("(")]
+        new_name = " ".join(new_name_fragments)
+        return new_name
+
+
     def _generate_print(self, event, psych):
         generated = "EVENT: " + event + "\n"
 
         for i, competitor in enumerate(psych):
             rank = str(i + 1)
-            name = competitor["name"]
+            name = self._trim_parens(competitor["name"])
             time = competitor["time"]
             use_single = competitor["use_single"]
             use_single_suffix = " (s)" if use_single else ""
