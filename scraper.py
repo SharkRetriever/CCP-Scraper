@@ -101,3 +101,21 @@ class PsychScraper:
         competitors = sorted(competitors, key = lambda competitor: competitor["time"].milliseconds)
 
         return competitors
+
+
+
+class EventScraper:
+    def __init__(self, competition):
+        self.competition = competition
+        self._htmlscraper = HTMLScraper()
+
+
+    def scrape(self):
+        site_str = "http://www.canadiancubing.com/Event/" + self.competition
+
+        scrape_result = self._htmlscraper.scrape(site_str)
+        site_tree = etree.HTML(scrape_result)
+
+        events_list = site_tree.xpath("//h2[@id='events']/following-sibling::div/ul/li")
+        events = [x.xpath("text()")[0].strip() for x in events_list]
+        return events
