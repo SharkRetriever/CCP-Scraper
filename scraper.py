@@ -2,6 +2,7 @@ import requests
 import sys
 from lxml import etree
 from ptime import Time
+from cache import Cache
 
 class HTMLScraper:
     def __init__(self):
@@ -24,6 +25,7 @@ class PsychScraper:
         self.competition = competition
 
         self._htmlscraper = HTMLScraper() 
+        self._cache = Cache()
         self._wca_event_dict = { "2x2x2": "222", "3x3x3": "333", 
                 "3x3x3 One-Handed": "333oh", "3x3x3 Blindfolded": "333bf",
                 "4x4x4 Blindfolded": "444bf", "5x5x5 Blindfolded": "555bf",
@@ -48,6 +50,7 @@ class PsychScraper:
             time = Time(event_average_text)
             return time
 
+
     def _get_single_time(self, event_block):
         event_single_block = event_block.xpath("td")[4]
 
@@ -58,11 +61,17 @@ class PsychScraper:
             time = Time(event_single_text)
             return time
 
+
     def _get_time(self, competitor, event):
         wca_profile_id = competitor.xpath("@href")[0].split("=")[-1]
         wca_site_str = "https://www.worldcubeassociation.org/persons/" + wca_profile_id
-        wca_scrape_result = self._htmlscraper.scrape(wca_site_str)
-        wca_site_tree = etree.HTML(wca_scrape_result)
+
+        wca_site_tree = self._cache.get_page_tree(wca_profile_id)
+
+        if wca_site_tree is None:
+            wca_scrape_result = self._htmlscraper.scrape(wca_site_str)
+            wca_site_tree = etree.HTML(wca_scrape_result)
+            self._cache.add_page_tree(wca_profile_id, wca_site_tree)
 
         event_block = None
         try:

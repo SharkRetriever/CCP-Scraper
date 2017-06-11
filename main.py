@@ -5,6 +5,9 @@ import datetime
 def main():
     competition_name = input("Enter abbreviated competition name (e.g. NCR2017): ")
 
+    start_time = datetime.datetime.now()
+    done_str = "DONE"
+
     vscraper = ValidationScraper(competition_name)
     competition_valid = vscraper.check_competition_valid()
     if not competition_valid:
@@ -16,9 +19,6 @@ def main():
     file_name_segments = [str(now.year), str(now.month).zfill(2), str(now.day).zfill(2), 
             competition_name, "psych.txt"]
     output_file_name = "-".join(file_name_segments)
-
-    start_time = datetime.datetime.now()
-    done_str = "DONE"
 
     print("Initializing scrapers and generator...", end="", flush=True)
     pscraper = PsychScraper(competition_name)
