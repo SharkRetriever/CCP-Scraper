@@ -95,5 +95,6 @@ ENV/
 .ropeproject
 
 # mkdocs documentation
-/siteactivate/bin activate/include activate/lib activate/pip-selfcheck.json
-results.txt/*
+/site
+activate/*
+results.txt

@@ -48,7 +48,7 @@ class PsychScraper:
             time = Time(event_average_text)
             return time
 
-    def _get_single_time(self, competitor, event):
+    def _get_single_time(self, event_block):
         event_single_block = event_block.xpath("td")[4]
 
         event_single_text = event_single_block.xpath("a/text()")[0].strip()
@@ -70,12 +70,12 @@ class PsychScraper:
             event_id = self._wca_event_dict[event]
             event_block = records_table.xpath("//td[@class='event' and @data-event='" + event_id + "']/..")[0]
         except:
-            return None
+            return None, None
 
-        event_average_text = _get_average_time(self, event_block);
-        event_single_text = _get_single_time(self, event_block);
+        event_average_text = self._get_average_time(event_block);
+        event_single_text = self._get_single_time(event_block);
 
-        if event_average_text is not None and (not event.endsWith("Blindfolded") and not event.endsWith("Blind")):
+        if event_average_text is not None and not event.endswith("Blindfolded") and not event.endswith("Blind"):
             return event_average_text, False
         elif event_single_text is not None:
             return event_single_text, True
