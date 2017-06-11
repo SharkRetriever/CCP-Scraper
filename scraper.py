@@ -119,3 +119,21 @@ class EventScraper:
         events_list = site_tree.xpath("//h2[@id='events']/following-sibling::div/ul/li")
         events = [x.xpath("text()")[0].strip() for x in events_list]
         return events
+
+
+
+class ValidationScraper:
+    def __init__(self, competition):
+        self.competition = competition
+        self._htmlscraper = HTMLScraper()
+
+
+    def check_competition_valid(self):
+        site_str = "http://www.canadiancubing.com/Event/" + self.competition
+
+        try:
+            scrape_result = self._htmlscraper.scrape(site_str)
+            return True
+        except:
+            return False
+
