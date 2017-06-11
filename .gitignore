@@ -97,4 +97,4 @@ ENV/
 # mkdocs documentation
 /site
 activate/*
-results.txt
+20*.txt

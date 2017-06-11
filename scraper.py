@@ -133,6 +133,8 @@ class ValidationScraper:
 
         try:
             scrape_result = self._htmlscraper.scrape(site_str)
+            site_tree = etree.HTML(scrape_result)
+            banner = site_tree.xpath("//div[@id='layout-banner']/h4")[0]
             return True
         except:
             return False

@@ -39,8 +39,7 @@ def main():
     end_time = datetime.datetime.now()
     duration = end_time - start_time
     minutes, seconds = divmod(duration.total_seconds(), 60)
-    print("Psych sheet generated in " + str(round(minutes)) + " minutes and " + str(round(seconds)) + " seconds.")
-
+    print("Psych sheet generated in " + str(round(minutes)) + " minutes and " + str(round(seconds)) + " seconds under name '" + output_file_name + "'.")
 
 
 if __name__ == "__main__":
