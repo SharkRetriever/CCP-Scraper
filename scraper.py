@@ -1,8 +1,10 @@
 import requests
 import sys
+import concurrent.futures
 from lxml import etree
 from ptime import Time
 from cache import Cache
+from functools import partial
 
 class HTMLScraper:
     def __init__(self):
@@ -92,6 +94,15 @@ class PsychScraper:
             return None, None
         
 
+    def _get_data(self, competitor, event):
+        competitor_time, use_single = self._get_time(competitor, event)
+        if competitor_time is None:
+            return None, None, None
+
+        competitor_name = self._get_name(competitor)
+        return competitor_name, competitor_time, use_single
+
+
     def scrape(self, event):
         site_str = "http://www.canadiancubing.com/Event/" + self.competition + "/Competitors/" + event.replace(" ", "%20")
 
@@ -101,11 +112,10 @@ class PsychScraper:
         with_results_competitors_trees = site_tree.xpath("//table[@class='table table-hover table-striped table-bordered']//a")
         competitors = []
 
-        for competitor in with_results_competitors_trees:
-            competitor_name = self._get_name(competitor)
-            competitor_time, use_single = self._get_time(competitor, event)
-            if competitor_time is not None:
-                competitors.append({ 'name': competitor_name, 'time': competitor_time, 'use_single': use_single })
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            for competitor_name, competitor_time, use_single in executor.map(partial(self._get_data, event=event), with_results_competitors_trees, chunksize=10):
+                if competitor_time is not None:
+                    competitors.append({ 'name': competitor_name, 'time': competitor_time, 'use_single': use_single })
         
         competitors = sorted(competitors, key = lambda competitor: competitor["time"].milliseconds)
 
