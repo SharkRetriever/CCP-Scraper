@@ -1,8 +1,8 @@
-# CCP-Scraper #
+# CanadianCubing Psych Scraper #
 
 ## What is it? ##
 
-CCP-Scraper is a web scraper that generates psych sheets for CanadianCubing speedcubing competitions.  
+A web scraper that generates psych sheets for CanadianCubing speedcubing competitions.  
 Speedcubing is a hobby where solvers attempt to solve the Rubik's cube (and related twisty puzzles) as quickly as they can.
 
 The psych sheet lists a ranking of solvers along with their best times in that event.  

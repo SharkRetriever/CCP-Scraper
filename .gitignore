@@ -96,5 +96,6 @@ ENV/
 
 # mkdocs documentation
 /site
+
 activate/*
 20*.txt
