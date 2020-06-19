@@ -1,4 +1,8 @@
-# CanadianCubing Psych Scraper #
+# [DEPRECATED] CanadianCubing Psych Scraper #
+
+This repository has been deprecated (and should have been deprecated earlier), due to it becoming obsolete after  CanadianCubing started showing psych sheets for their competitions, such as with [Québec City 2019](http://www.canadiancubing.com/Events/QC2019/PsychSheet#!/).
+
+--------
 
 ## What is it? ##
 
